@@ -1,0 +1,46 @@
+<html layout:decorate="~{layout}">
+    <div layout:fragment="content" class="container my-3">
+    
+        <div class="border">
+            <div class="rounded bg-light bg-gradient m-3 p-2 fw-bold text-center d-flex align-items-center">
+                <img class="rounded border" width="32px" height="32px" 
+                th:src="@{|/image/${user != null ? user.profileImage != null ? user.profileImage.id : 'error' : 'error'}|}" onerror="this.src='https://zrr.kr/xScc'">
+                <a class="text-decoration-none text-dark w-100" th:href="@{/article/create}">무슨 생각을 하고 계신가요?</a>
+            </div>
+        </div>
+      
+        <h2 class="fw-bold my-3">전체 글 보기</h2>
+    
+      <div class="my-3">
+          <div class="border-bottom" th:each="article : ${paginator}">
+            <div class="d-flex">
+                <h5>
+                    <a class="fw-bold text-decoration-none text-dark" th:href="@{|/article/detail/${article.id}|}" th:text="${article.subject}"></a>
+                    <span class="text-primary fw-bold small" th:if="${#lists.size(article.comments) > 0}" th:text="|[${#lists.size(article.comments)}]|"></span>
+                </h5>
+            </div>
+
+            <div class="d-flex gap-2">
+                <span class="fw-bold text-dark" th:if="${article.writer != null}" th:text="${article.writer.nickname}"></span>
+                <span class="text-secondary" th:text="${#temporals.format(article.createdAt, 'yyyy년MM월dd일 HH:mm:ss')}"></span>
+            </div>
+          </div>
+      </div>
+      <nav aria-label="Page navigation" th:if="${!paginator.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${paginator.number &lt; 10} ? 'disabled'">
+                <!-- 이전페이지 버튼 누르면, 이전 페이지의 첫 번째 페이지로 넘어감 -->
+                <a th:class="page-link" th:href="@{|?page=${(paginator.number/10-1)*10+1}|}">이전</a>
+                <!-- 이전페이지 버튼 누르면, 이전 페이지의 마지막 페이지로 넘어감 -->
+                <!-- <a th:class="page-link" th:href="@{|?page=${paginator.number/10*10}|}">이전</a> -->
+            </li>
+            <li class="page-item" th:each="pageNum : ${#numbers.sequence(paginator.number/10*10+1, paginator.number/10*10+10 < paginator.totalPages ? paginator.number/10*10+10 : paginator.totalPages)}" th:classappend="${pageNum == paginator.number+1} ? 'active'">
+                <a class="page-link" th:href="@{|?page=${pageNum}|}" th:text="${pageNum}"></a>
+            </li>
+            <li class="page-item" th:classappend="${(paginator.totalPages-1)/10*10 <= paginator.number} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${((paginator.number/10)+1)*10+1}|}">다음</a>
+            </li>
+        </ul>
+    </nav>
+    </div>
+</html>

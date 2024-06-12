@@ -1,0 +1,24 @@
+<html layout:decorate="~{layout}">
+    <div layout:fragment="content" class="container">
+        <form th:action="@{/user/create}" th:object="${signupForm}" method="post">
+            <h3 class="my-3">회원가입</h3>
+            <div th:replace="~{fragments/error :: errorFragment}" />
+            <div class="mb-3">
+                <input type="text" th:field="*{username}" class="form-control" placeholder="아이디">
+            </div>
+            <div class="mb-3">
+                <input type="password" th:field="*{password1}" class="form-control" placeholder="비밀번호">
+            </div>
+            <div class="mb-3">
+                <input type="password" th:field="*{password2}" class="form-control" placeholder="비밀번호 확인">
+            </div>
+            <div class="mb-3">
+                <input type="text" th:field="*{nickname}" class="form-control" placeholder="닉네임">
+            </div>
+
+            <div class="my-2 d-flex justify-content-end">
+                <input type="submit" value="회원가입" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+</html>
